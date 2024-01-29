@@ -1,8 +1,8 @@
+import customerModel from "../models/customer";
+
 export async function getCustomersController(req:any, res:any) {
-  try{
-    const { db } = req.app;
-    
-    const result = await db.collection('customers').find().toArray();
+  try{    
+    const result = await customerModel.find();
     res.status(200).json({ 
       message: "Customers retrieved",
       customers: result

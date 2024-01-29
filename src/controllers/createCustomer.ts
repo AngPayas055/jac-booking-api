@@ -1,6 +1,7 @@
+import customerModel from "../models/customer";
+
 export async function createCustomerController(req:any, res:any) {
   try{
-    const { db } = req.app;
     const { name, email, phone, address } = req.body;
 
     if(!name){
@@ -15,27 +16,22 @@ export async function createCustomerController(req:any, res:any) {
     if(address && address.length > 100){
       return res.status(400).json({ message:'Address must be less than 100 characters' });
     }
-
-    const existingCustomer = await db.collection('customers').findOne({
+    const existingCustomer = await customerModel.findOne({
       email: email.toLowerCase()
     })
-
-    if(existingCustomer) {
-      return res.status(400).json({ message: 'Customer already exists' })
+    
+    if (existingCustomer) {
+      return res.status(400).json({ message: 'Customer already exists' });
     }
 
-    const result = await db.collection('customers').insertOne({
+    const result = await customerModel.create({
       name,
       email: email.toLowerCase(),
       phone,
       address
     })
     console.log(result)
-    if(result.acknowledged){
-      res.status(200).json({ message: 'Customer created' })
-    }else {
-      throw new Error('Customer not created')
-    }
+    res.status(200).json({ message: 'Customer created' })
   }catch(error){
     res.status(500).json({ error: error.toString() })
   }

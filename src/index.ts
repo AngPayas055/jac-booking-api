@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 const express = require('express');
 const body = require('body-parser');
@@ -9,15 +10,15 @@ var url = process.env.URI;
 async function start() {
   try{
     const app = express();
-    const mongo = await MongoClient.connect(url)
-    await mongo.connect();
-    app.db = mongo.db()
     app.use(body.json({
       limit: '500kb'
     }))
-    //routes 
     app.use('/customers', require('./routes/customers'));
-    app.listen(3001, () => {
+
+    app.listen(3001, async () => {
+      if (!url) throw new Error('Mongo URI unavailable');
+      await mongoose.connect(url);
+
       console.log('Server is running on port 3000');
     })
   }catch(error){
