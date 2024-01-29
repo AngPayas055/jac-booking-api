@@ -1,15 +1,15 @@
 import { ObjectId } from "mongodb";
+import customerModel from "../models/customer";
 
 export async function getCustomerController(req:any, res:any) {
   try{
-    const { db } = req.app;
     const { id } = req.params;
 
     if(!id){
       return res.status(400).json({ message: 'Customer ID is required' })
     }
 
-    const result = await db.collection('customers').findOne( {_id: new ObjectId(id)} );
+    const result = await customerModel.findOne( {_id: new ObjectId(id)} );
 
     if(!result){
       return res.status(400).json({ message: 'Customer not found' })
