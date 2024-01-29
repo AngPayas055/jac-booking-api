@@ -10,7 +10,7 @@ var url = process.env.URI;
 const local = 3000
 const dev = "https://jac-booking-api.vercel.app/"
 
-async function start() {
+export async function start() {
   try{
     const app = express();
     app.use(body.json({
