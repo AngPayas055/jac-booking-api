@@ -7,6 +7,9 @@ var dotenv = require('dotenv');
 dotenv.config();
 var url = process.env.URI;
 
+const local = 3000
+const dev = "https://jac-booking-api.vercel.app/"
+
 async function start() {
   try{
     const app = express();
@@ -15,7 +18,7 @@ async function start() {
     }))
     app.use('/customers', require('./routes/customers'));
 
-    app.listen(3001, async () => {
+    app.listen(local, async () => {
       if (!url) throw new Error('Mongo URI unavailable');
       await mongoose.connect(url);
 
