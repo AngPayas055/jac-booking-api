@@ -28,7 +28,7 @@ app.listen(local, async () => {
     console.log('Server is running on port 3000');
 
   }catch (ex) {
-    console.error(ex || "");
+    console.error(ex || "error connecting to mongodb");
   }
 })
 
