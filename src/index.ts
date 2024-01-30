@@ -10,11 +10,14 @@ var url = process.env.MONGODB_URI;
 const local = 8080
 const dev = "https://jac-booking-api.vercel.app/"
 
-
+console.log(url)
 export const app = express();
 app.use(body.json({
   limit: '500kb'
 }))
+app.get('/', (req, res) => {  
+  res.send("api running")
+})
 app.use('/customers', require('./routes/customers'));
 
 app.listen(local, async () => {
