@@ -5,7 +5,7 @@ const express = require('express');
 const body = require('body-parser');
 var dotenv = require('dotenv');
 dotenv.config();
-var url = process.env.URI;
+var url = process.env.MONGODB_URI;
 
 const local = 8080
 const dev = "https://jac-booking-api.vercel.app/"
