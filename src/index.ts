@@ -21,14 +21,15 @@ app.get('/', (req, res) => {
 app.use('/customers', require('./routes/customers'));
 
 app.listen(local, async () => {
+  console.log('testmongo con')
   try{
     if (!url) throw new Error('Mongo URI unavailable');
     await mongoose.connect(url);
   
     console.log('Server is running on port 3000');
 
-  }catch (ex) {
-    console.error(ex || "error connecting to mongodb");
+  }catch (error) {
+    console.error(error || "error connecting to mongodb");
   }
 })
 
