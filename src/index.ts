@@ -7,10 +7,9 @@ var dotenv = require('dotenv');
 dotenv.config();
 var url = process.env.MONGODB_URI;
 
-const local = 3000
+const local = process.env.PORT
 const dev = "https://jac-booking-api.vercel.app/"
 
-console.log(url)
 export const app = express();
 app.use(body.json({
   limit: '500kb'
@@ -21,7 +20,6 @@ app.get('/', (req, res) => {
 app.use('/customers', require('./routes/customers'));
 
 app.listen(local, async () => {
-  console.log('testmongo con')
   try{
     if (!url) throw new Error('Mongo URI unavailable');
     await mongoose.connect(url);
