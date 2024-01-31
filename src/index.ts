@@ -7,7 +7,7 @@ var dotenv = require('dotenv');
 dotenv.config();
 var url = process.env.MONGODB_URI;
 
-const local = 8080
+const local = 3000
 const dev = "https://jac-booking-api.vercel.app/"
 
 console.log(url)
@@ -26,7 +26,7 @@ app.listen(local, async () => {
     if (!url) throw new Error('Mongo URI unavailable');
     await mongoose.connect(url);
   
-    console.log('Server is running on port 3000');
+    console.log('Server is running on port:'+local);
 
   }catch (error) {
     console.error(error || "error connecting to mongodb");
