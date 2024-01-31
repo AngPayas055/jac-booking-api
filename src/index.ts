@@ -1,4 +1,3 @@
-import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
 
 const express = require('express');
@@ -7,8 +6,7 @@ var dotenv = require('dotenv');
 dotenv.config();
 var url = process.env.MONGODB_URI;
 
-const local = process.env.PORT
-// const dev = "https://jac-booking-api.vercel.app/"
+const port = process.env.PORT
 
 export const app = express();
 import path from 'path';
@@ -26,12 +24,12 @@ app.get('/', (req, res) => {
 
 app.use('/customers', require('./routes/customers'));
 
-app.listen(local, async () => {
+app.listen(port, async () => {
   try{
     if (!url) throw new Error('Mongo URI unavailable');
     await mongoose.connect(url);
   
-    console.log('Server is running on port:'+local);
+    console.log(`Server is running on http://localhost:${port}`);
 
   }catch (error) {
     console.error(error || "error connecting to mongodb");
