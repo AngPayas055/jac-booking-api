@@ -8,15 +8,22 @@ dotenv.config();
 var url = process.env.MONGODB_URI;
 
 const local = process.env.PORT
-const dev = "https://jac-booking-api.vercel.app/"
+// const dev = "https://jac-booking-api.vercel.app/"
 
 export const app = express();
+import path from 'path';
+
+const publicPath = path.join(__dirname, '..', 'public');
+app.use(express.static(publicPath));
+
 app.use(body.json({
   limit: '500kb'
 }))
+
 app.get('/', (req, res) => {  
-  res.send("api running")
+  res.sendFile(path.join(publicPath, 'index.html'));
 })
+
 app.use('/customers', require('./routes/customers'));
 
 app.listen(local, async () => {
@@ -30,23 +37,3 @@ app.listen(local, async () => {
     console.error(error || "error connecting to mongodb");
   }
 })
-
-// export async function start() {
-//   try{
-//     const app = express();
-//     app.use(body.json({
-//       limit: '500kb'
-//     }))
-//     app.use('/customers', require('./routes/customers'));
-
-//     app.listen(local, async () => {
-//       if (!url) throw new Error('Mongo URI unavailable');
-//       await mongoose.connect(url);
-
-//       console.log('Server is running on port 3000');
-//     })
-//   }catch(error){
-//     console.log(error);
-//   }
-// }
-// start();
