@@ -1,4 +1,4 @@
-import customerModel from "../models/customer";
+import customerModel from "../models/Customer";
 
 export async function getCustomersController(req:any, res:any) {
   try{    
