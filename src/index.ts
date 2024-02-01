@@ -1,19 +1,20 @@
 import mongoose from "mongoose";
+import path from 'path';
 
 const express = require('express');
 const body = require('body-parser');
-var dotenv = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.config();
-var url = process.env.MONGODB_URI;
 
-const port = process.env.PORT
-
-export const app = express();
-import path from 'path';
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
-app.use(express.static(publicPath));
+const port = process.env.PORT
+const url = process.env.MONGODB_URI;;
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(express.static(publicPath));
 app.use(body.json({
   limit: '500kb'
 }))
@@ -21,7 +22,6 @@ app.use(body.json({
 app.get('/', (req, res) => {  
   res.sendFile(path.join(publicPath, 'index.html'));
 })
-
 app.use('/customers', require('./routes/customers'));
 
 app.listen(port, async () => {
