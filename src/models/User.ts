@@ -57,13 +57,30 @@ const User = mongoose.model<IUser>('User', userSchema);
 export { User, UserRole };
 
 
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 // Register endpoint
 export const registerController = async (req: Request, res: Response) => {
   try {
     const { phone, firstName, lastName, email, password } = req.body;
-    
+
     if (!phone || !firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    if (phone.length < 6 || phone.length > 15) {
+      return res.status(400).json({ error: 'Phone number must be between 6 and 15 characters' });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
 
     const existingUser = await User.findOne({ $or: [{ phone }, { email }] });
