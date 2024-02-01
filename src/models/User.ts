@@ -1,4 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import express, { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
 enum UserRole {
   ADMIN = 'admin',
@@ -53,3 +55,38 @@ const userSchema: Schema = new Schema({
 const User = mongoose.model<IUser>('User', userSchema);
 
 export { User, UserRole };
+
+
+// Register endpoint
+export const registerController = async (req: Request, res: Response) => {
+  try {
+    const { phone, firstName, lastName, email, password } = req.body;
+    
+    if (!phone || !firstName || !lastName || !email || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const existingUser = await User.findOne({ $or: [{ phone }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      phone,
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: UserRole.CUSTOMER, //default role
+    });
+
+    const savedUser = await newUser.save();
+
+    res.status(201).json(savedUser);
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

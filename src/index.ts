@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 })
 app.use('/customers', require('./routes/customers'));
+app.use('/users', require('./routes/users'));
 
 app.listen(port, async () => {
   try{
