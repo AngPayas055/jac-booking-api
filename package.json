@@ -19,11 +19,11 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
-    "ts-node": "^10.9.2"
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.8",
+    "ts-node": "^10.9.2",
     "types": "^0.1.1",
     "typescript": "^5.3.3"
   }

@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "types": ["ts-node"],
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "esnext",
+    "target": "es6",
     "moduleResolution": "node",
     "removeComments": true,
     "sourceMap": false,
