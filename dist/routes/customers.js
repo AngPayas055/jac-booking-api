@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const createCustomer_1 = require("../controllers/createCustomer");
+const getCustomer_1 = require("../controllers/getCustomer");
+const getCustomers_1 = require("../controllers/getCustomers");
+const express = require('express');
+const router = express.Router();
+console.log('customers route');
+router.post('/', createCustomer_1.createCustomerController);
+router.get('/', getCustomers_1.getCustomersController);
+router.get('/:id', getCustomer_1.getCustomerController);
+module.exports = router;
