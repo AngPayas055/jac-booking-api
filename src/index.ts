@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import path from 'path';
-import swaggerDocs from "./utils/swagger";
 
 const express = require('express');
 const body = require('body-parser');
