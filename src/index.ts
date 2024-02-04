@@ -14,7 +14,8 @@ const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT
 const url = process.env.MONGODB_URI;;
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+console.log(`Docs available at http://localhost:${port}/api-docs`)
 app.use(express.static(publicPath));
 app.use(body.json({
   limit: '500kb'
@@ -32,7 +33,7 @@ app.listen(port, async () => {
     await mongoose.connect(url);
   
     console.log(`Server is running on http://localhost:${port}`);
-    swaggerDocs(app, port)
+    // swaggerDocs(app, port)
 
   }catch (error) {
     console.error(error || "error connecting to mongodb");

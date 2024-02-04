@@ -11,7 +11,7 @@
       "post": {
         "x-swagger-router-controller": "home",
         "operationId": "index",
-        "tags": ["/test"],
+        "tags": ["test"],
         "description": "[Login 123](https://www.google.com)",
         "parameters": [{
           "name": "test",
@@ -31,7 +31,7 @@
       "get": {
         "x-swagger-router-controller": "bar",
         "operationId": "impossible",
-        "tags": ["/test"],
+        "tags": ["test"],
         "description": "",
         "parameters": [],
         "responses": {}
