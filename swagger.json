@@ -1,5 +1,8 @@
 {
   "swagger": "2.0",
+  "swaggerUi": {
+    "tryItOutEnabled": false 
+  },
   "info": {
     "title": "JAC Booking API by <jmendiola>",
     "description": "",
@@ -7,42 +10,64 @@
   },
   "produces": ["application/json"],
   "paths": {
-    "/test": {
+    "/users": {
       "post": {
-        "x-swagger-router-controller": "home",
-        "operationId": "index",
-        "tags": ["test"],
-        "description": "[Login 123](https://www.google.com)",
-        "parameters": [{
-          "name": "test",
-          "in": "formData",
-          "type": "array",
-          "collectionFormat": "multi",
-          "items": {
-            "type": "integer"
-           }
-        },
-      { "name": "profileId", "in": "formData", "required": true, "type": "string" },
-      { "name": "file", "in": "formData", "type": "file", "required": "true" }],
-        "responses": {}
-      }
-    },
-    "/bar": {
-      "get": {
-        "x-swagger-router-controller": "bar",
-        "operationId": "impossible",
-        "tags": ["test"],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": ["Authentication"],
+        "summary": "Register a new user",
+        "description": "Registers a new user with the provided information.",
+        "operationId": "registerUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "formData",
+            "description": "User's phone number",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "firstName",
+            "in": "formData",
+            "description": "User's first name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "lastName",
+            "in": "formData",
+            "description": "User's last name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "User's email address",
+            "type": "string",
+            "format": "email",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "User's password",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User successfully registered"
+          },
+          "400": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
       }
     }
- },
- "securityDefinitions": {
-   "api_key": {
-     "type": "apiKey",
-     "name": "api_key",
-     "in":"header"
-   }
- }
+  }
 }

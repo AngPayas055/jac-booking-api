@@ -8,13 +8,17 @@ dotenv.config();
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger.json');
+var options = {
+  customCss: '.swagger-ui .opblock .opblock-section-header { display: none }'//remove try it out button
+};
+
 const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT
 const url = process.env.MONGODB_URI;;
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-console.log(`Docs available at http://localhost:${port}/docs`)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+console.log(`Docs available at http://localhost:${port}/docs/`)
 app.use(express.static(publicPath));
 app.use(body.json({
   limit: '500kb'
