@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import path from 'path';
+import { sendGmail } from "./services/email";
 
 const express = require('express');
 const body = require('body-parser');
@@ -27,6 +28,7 @@ app.use(body.json({
 app.get('/', (req, res) => {  
   res.sendFile(path.join(publicPath, 'index.html'));
 })
+app.get('/email', sendGmail)
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
 

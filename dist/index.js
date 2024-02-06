@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const path_1 = __importDefault(require("path"));
+const email_1 = require("./services/email");
 const express = require('express');
 const body = require('body-parser');
 const dotenv = require('dotenv');
@@ -37,6 +38,7 @@ app.use(body.json({
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(publicPath, 'index.html'));
 });
+app.get('/email', email_1.sendGmail);
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
