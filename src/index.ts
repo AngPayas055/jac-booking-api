@@ -28,7 +28,7 @@ app.use(body.json({
 app.get('/', (req, res) => {  
   res.sendFile(path.join(publicPath, 'index.html'));
 })
-app.get('/email', sendGmail)
+app.post('/email', sendGmail)
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
 

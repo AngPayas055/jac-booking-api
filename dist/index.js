@@ -38,7 +38,7 @@ app.use(body.json({
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(publicPath, 'index.html'));
 });
-app.get('/email', email_1.sendGmail);
+app.post('/email', email_1.sendGmail);
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {

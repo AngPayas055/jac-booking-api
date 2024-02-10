@@ -1,17 +1,67 @@
 import express, { Request, Response } from 'express';
 const nodemailer = require("nodemailer")
+const AWS = require('aws-sdk'); 
 require("dotenv").config();
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const path = require("path")
 
+const SES_CONFIG = {
+  accessKeyId: process.env.ACCESS_KEY,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.REGION
+}
+
+const AWS_SES = new AWS.SES(SES_CONFIG);
+
+const sendEmail = async (recipientEmail, name) => {
+  let params = {
+    Source: process.env.SENDER,
+    Destination: {
+      ToAddresses: [
+        recipientEmail
+      ]
+    },
+    ReplyToAddresses: [],
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: '<h1>this is the body html</h1>'
+        },
+        Text: {
+          Charset: 'UTF-8',
+          Data: 'this is the text'
+        }
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: `Hello, ${name}`
+      }
+    }
+  }
+  try{
+    const res = await AWS_SES.sendEmail(params).promise();
+    console.log('Email has been sent!', res)
+  } catch (error) {
+    console.error(error)
+  }
+
+}
+
+// sendEmail("lvl99tommy@gmail.com", "web wizard")
+
 export const sendCommonEmail = async ( to: string[], subject: string, body:string ) => {
+  
+sendEmail("lvl99tommy@gmail.com", "web wizard")
+return
   try{
     const transporterCommon = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      host: "email-smtp.ap-southeast-1.amazonaws.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.USER,
-        pass: process.env.APP_PASSWORD,
+        user: "AKIAV3PINWXEKV4EDFVS", //process.env.USER,
+        pass: "BFSdD5qsvDvj0MmpdtF0MLlGbqsiQSDG/HHRIq4bT9LI"//process.env.APP_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false
