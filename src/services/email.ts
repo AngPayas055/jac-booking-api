@@ -60,8 +60,8 @@ return
       port: 587,
       secure: false,
       auth: {
-        user: "AKIAV3PINWXEKV4EDFVS", //process.env.USER,
-        pass: "BFSdD5qsvDvj0MmpdtF0MLlGbqsiQSDG/HHRIq4bT9LI"//process.env.APP_PASSWORD,
+        user: process.env.USER,
+        pass: process.env.APP_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false
