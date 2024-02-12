@@ -56,37 +56,8 @@ const sendEmail = (recipientEmail, name) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 const sendCommonEmail = (to, subject, body) => __awaiter(void 0, void 0, void 0, function* () {
-    sendEmail("lvl99tommy@gmail.com", "web wizard");
+    sendEmail("jhonreymendiola@gmail.com", "web wizard");
     return;
-    try {
-        const transporterCommon = nodemailer.createTransport({
-            host: "email-smtp.ap-southeast-1.amazonaws.com",
-            port: 587,
-            secure: false,
-            auth: {
-                user: "AKIAV3PINWXEKV4EDFVS",
-                pass: "BFSdD5qsvDvj0MmpdtF0MLlGbqsiQSDG/HHRIq4bT9LI"
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
-        const commonMailOptions = {
-            from: {
-                name: 'Jac booking',
-                address: process.env.USER
-            },
-            to: to,
-            subject: subject,
-            text: body,
-            html: "",
-        };
-        yield transporterCommon.sendMail(commonMailOptions);
-        console.log('Email has been sent!');
-    }
-    catch (error) {
-        console.error(error);
-    }
 });
 exports.sendCommonEmail = sendCommonEmail;
 const sendGmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
