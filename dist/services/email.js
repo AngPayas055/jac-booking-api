@@ -9,41 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendMail = exports.sendGmail = exports.sendCommonEmail = void 0;
-const nodemailer = require("nodemailer");
-const AWS = require('aws-sdk');
+exports.sendGmail = exports.sendCommonEmail = void 0;
 require("dotenv").config();
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
-const path = require("path");
+const AWS = require('aws-sdk');
 const SES_CONFIG = {
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
     region: process.env.REGION
 };
 const AWS_SES = new AWS.SES(SES_CONFIG);
-const sendEmail = (recipientEmail, name) => __awaiter(void 0, void 0, void 0, function* () {
+const sendCommonEmail = (to, subject, body) => __awaiter(void 0, void 0, void 0, function* () {
     let params = {
         Source: process.env.SENDER,
         Destination: {
-            ToAddresses: [
-                recipientEmail
-            ]
+            ToAddresses: to
         },
         ReplyToAddresses: [],
         Message: {
             Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: '<h1>this is the body html</h1>'
-                },
                 Text: {
                     Charset: 'UTF-8',
-                    Data: 'this is the text'
+                    Data: body
                 }
             },
             Subject: {
                 Charset: 'UTF-8',
-                Data: `Hello, ${name}`
+                Data: subject
             }
         }
     };
@@ -55,10 +47,6 @@ const sendEmail = (recipientEmail, name) => __awaiter(void 0, void 0, void 0, fu
         console.error(error);
     }
 });
-const sendCommonEmail = (to, subject, body) => __awaiter(void 0, void 0, void 0, function* () {
-    sendEmail("jhonreymendiola@gmail.com", "web wizard");
-    return;
-});
 exports.sendCommonEmail = sendCommonEmail;
 const sendGmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -67,39 +55,7 @@ const sendGmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(201).json({ message: "email sent" });
     }
     catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error', err: error });
     }
 });
 exports.sendGmail = sendGmail;
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.USER,
-        pass: process.env.APP_PASSWORD,
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
-const mailOptions = {
-    from: {
-        name: 'Jac booking',
-        address: process.env.USER
-    },
-    to: ["jhonreymendiola@gmail.com"],
-    subject: "Hello ✔",
-    text: "Hello world?",
-    html: "<b>Hello world?</b>",
-};
-const sendMail = (transporter, mailOptions) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield transporter.sendMail(mailOptions);
-        console.log('Email has been sent!');
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
-exports.sendMail = sendMail;
