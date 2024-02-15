@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import path from 'path';
 import { sendGmail } from "./services/email";
+import { login } from "./controllers/loginUser";
 
 const express = require('express');
 const body = require('body-parser');
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 })
 app.post('/email', sendGmail)
+app.post('/login', login)
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
 
