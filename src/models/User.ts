@@ -63,15 +63,12 @@ const isValidEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-const hashPassword = async (password) => {
-  return await bcrypt.hash(password, 10);
-};
-
 const comparePassword = async (password, hashedPassword) => {
   return await bcrypt.compare(password, hashedPassword);
 };
 
 function generateToken(user) {
+  return "test token"
   // Implement your token generation logic here
   // You may want to use a library like jsonwebtoken
   // For example: return jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
