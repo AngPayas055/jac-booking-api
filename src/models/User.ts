@@ -79,6 +79,7 @@ function generateToken(user) {
 
 // Register endpoint
 export const registerController = async (req: Request, res: Response) => {
+  console.log('login log')
   try {
     const { phone, firstName, lastName, email, password } = req.body;
 
