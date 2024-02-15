@@ -4,7 +4,7 @@ import { getCustomersController } from "../controllers/getCustomers";
 
 const express = require('express');
 const router = express.Router();
-console.log('customers route');
+console.log('customers route loaded');
 
 router.post('/', createCustomerController)
 router.get('/', getCustomersController)
