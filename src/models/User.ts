@@ -56,7 +56,7 @@ const userSchema: Schema = new Schema({
 
 const User = mongoose.model<IUser>('User', userSchema);
 
-export { User, UserRole };
+export { User, UserRole, IUser };
 
 
 const isValidEmail = (email: string): boolean => {
@@ -74,12 +74,8 @@ function generateToken(email) {
     expiresIn: "7d",
   });
   return token
-  // Implement your token generation logic here
-  // You may want to use a library like jsonwebtoken
-  // For example: return jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
 }
 
-// Register endpoint
 export const registerController = async (req: Request, res: Response) => {
   console.log('login log')
   try {

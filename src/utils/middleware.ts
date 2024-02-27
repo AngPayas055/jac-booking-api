@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { IUser, User } from '../models/User';
 require('dotenv').config()
 
 export const authenticateToken = async (req: any, res: any, next: any) => {
@@ -30,8 +31,7 @@ const verifyJWT = async (token: string): Promise<{ success: boolean, user?: any 
               success: false
             });
           }
-          // @ts-ignore
-          const user = await userModel.findOne({ email: response.email });
+          const user = await User.findOne({ email: response.email });
           if (!user) {
             resolve({
               success: false
@@ -42,13 +42,8 @@ const verifyJWT = async (token: string): Promise<{ success: boolean, user?: any 
             success: true,
             user: {
               id: user._id,
-              email: user.email,
-              gmail_tokens: user.gmail_tokens,
-              license_type: user.license_type,
-              license_status: user.license_status,
-              mfa: user.mfa,
-              organization_id: user.organization_id,
-            }
+              email: user.email
+            } as IUser
           })
         } catch (ex) {
           resolve({
