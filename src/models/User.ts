@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from 'mongoose';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-// import jwt from "jsonwebtoken";
 
 enum UserRole {
   ADMIN = 'admin',
@@ -138,11 +137,8 @@ export const loginController = async (req: Request, res: Response) => {
     const isPasswordValid = await comparePassword(password, user.password);
 
     if (isPasswordValid) {
-      // Password is correct, you can proceed with authentication
-      // For example, you can generate a JWT token and send it back to the client
       res.status(200).json({ message: "Login successful", token: generateToken(email) });
     } else {
-      // Password is incorrect
       res.status(400).json({ message: "Incorrect email/password.", err: "Incorrect email/password." });
     }
 
