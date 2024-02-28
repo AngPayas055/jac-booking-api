@@ -117,7 +117,7 @@ export const registerController = async (req: Request, res: Response) => {
     res.status(201).json(savedUser);
   } catch (error) {
     console.error('Error during user registration:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', error: error });
   }
 };
 
@@ -131,7 +131,7 @@ export const loginController = async (req: Request, res: Response) => {
     const user = await User.findOne({ email: email })
     
     if (!user) {
-      res.status(400).send({ message: "Incorrect email/password.", err: "Incorrect email/password." });
+      res.status(400).send({ message: "Incorrect email/password.", error: "Incorrect email/password." });
       return;
     }
     const isPasswordValid = await comparePassword(password, user.password);
@@ -139,10 +139,18 @@ export const loginController = async (req: Request, res: Response) => {
     if (isPasswordValid) {
       res.status(200).json({ message: "Login successful", token: generateToken(email) });
     } else {
-      res.status(400).json({ message: "Incorrect email/password.", err: "Incorrect email/password." });
+      res.status(400).json({ message: "Incorrect email/password.", error: "Incorrect email/password." });
     }
 
   }catch(error){
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
+export const forgotPasswordController = async (req: Request, res: Response) => {
+  try{
+    res.status(200).json({ message: "forgot password controller" });
+  }catch (error){
+    res.status(500).json({ message: 'Internal server error', error: error });
   }
 }
