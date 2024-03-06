@@ -18,6 +18,7 @@ interface IUser extends Document {
   password: string;
   role: UserRole;
   bookings: string[]; // Modify based on your app's booking model
+  resetToken?: string;
 }
 
 const userSchema: Schema = new Schema({
@@ -52,6 +53,7 @@ const userSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Booking', // Reference to the Booking model (modify based on your app's booking model name)
   }],
+  resetToken: { type: String },
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
@@ -158,8 +160,13 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     if (!user) {
       res.status(400).send({ message: "Email not found", error: "Email not found" });
       return;
-    }
-    await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: tets link`);    
+    }  
+    const resetToken = await bcrypt.hash(email + Date.now().toString(), 10);
+    user.resetToken = resetToken;
+    await user.save();
+    const resetLink = `http://yourwebsite.com/reset-password/${resetToken}`;
+    await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: ${resetLink}`);
+
     res.status(200).json({ message: "Reset email sent successfully." });
   }catch (error){
     res.status(500).json({ message: 'Internal server error', error: error });
