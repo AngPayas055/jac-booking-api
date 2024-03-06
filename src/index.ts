@@ -19,7 +19,7 @@ const port = process.env.PORT
 const url = process.env.MONGODB_URI;;
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
-console.log(`Docs available at http://localhost:${port}/docs/`)
+// console.log(`Docs available at http://localhost:${port}/docs/`)
 app.use(express.static(publicPath));
 app.use(body.json({
   limit: '500kb'
