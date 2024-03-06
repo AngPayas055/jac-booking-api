@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
+import { sendCommonEmail } from '../services/email';
 
 enum UserRole {
   ADMIN = 'admin',
@@ -150,7 +151,16 @@ export const loginController = async (req: Request, res: Response) => {
 export const forgotPasswordController = async (req: Request, res: Response) => {
   try{
     const { email } = req.body;
-    res.status(200).json({ message: "forgot password controller" });
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    const user = await User.findOne({ email: email })    
+    if (!user) {
+      res.status(400).send({ message: "Email not found", error: "Email not found" });
+      return;
+    }
+    await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: tets link`);    
+    res.status(200).json({ message: "Reset email sent successfully." });
   }catch (error){
     res.status(500).json({ message: 'Internal server error', error: error });
   }
