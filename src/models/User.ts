@@ -117,7 +117,7 @@ export const registerController = async (req: Request, res: Response) => {
 
     const savedUser = await newUser.save();
 
-    res.status(201).json(savedUser);
+    res.status(201).json({ message: "User registered successfully", data: email });
   } catch (error) {
     console.error('Error during user registration:', error);
     res.status(500).json({ message: 'Internal server error', error: error });
@@ -138,9 +138,15 @@ export const loginController = async (req: Request, res: Response) => {
       return;
     }
     const isPasswordValid = await comparePassword(password, user.password);
+    const userData = {
+      token: generateToken(email),
+      email: email,
+      firstName: user.firstName,
+      lastName: user.lastName
+    }
 
     if (isPasswordValid) {
-      res.status(200).json({ message: "Login successful", token: generateToken(email) });
+      res.status(200).json({ message: "success", data: userData });
     } else {
       res.status(400).json({ message: "Incorrect email/password.", error: "Incorrect email/password." });
     }

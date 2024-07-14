@@ -16,8 +16,10 @@ var options = {
 const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT
-const url = process.env.MONGODB_URI;;
+const url = process.env.MONGODB_URI;
+var cors = require('cors')
 
+app.use(cors())
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 // console.log(`Docs available at http://localhost:${port}/docs/`)
 app.use(express.static(publicPath));
