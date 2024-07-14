@@ -79,7 +79,6 @@ function generateToken(email) {
 }
 
 export const registerController = async (req: Request, res: Response) => {
-  console.log('login log')
   try {
     const { phone, firstName, lastName, email, password } = req.body;
 
@@ -173,7 +172,6 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     let webAppLink = process.env.FRONTEND
     const resetLink = `${webAppLink}/forgot-password/${resetToken}`;
     const sendEmail = await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: ${resetLink}`);
-    console.log('link',sendEmail)
     if(sendEmail.MessageId){
       res.status(200).json({ message: "Reset email sent successfully." });
     } else{
@@ -190,7 +188,6 @@ export const resetPasswordController = async (req:Request, res:Response) => {
     if(password !== confirmPassword){
       return res.status(400).json({ message: "Password not match", error: "Password not match" });
     }
-    console.log(password, confirmPassword, resetToken)
     const user = await User.findOne({ resetToken: resetToken })   
     if (!user) {
       return res.status(400).json({ message: "Invalid User", error: "Invalid User" });
