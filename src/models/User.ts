@@ -164,7 +164,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     }
     const user = await User.findOne({ email: email })    
     if (!user) {
-      res.status(400).send({ message: "Email not found", error: "Email not found" });
+      res.status(400).json({ message: "Email not found", error: "Email not found" });
       return;
     }  
     const resetToken = await bcrypt.hash(email + Date.now().toString(), 10);
@@ -172,9 +172,13 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     await user.save();
     let webAppLink = process.env.FRONTEND
     const resetLink = `${webAppLink}/forgot-password/${resetToken}`;
-    await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: ${resetLink}`);
-
-    res.status(200).json({ message: "Reset email sent successfully." });
+    const sendEmail = await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: ${resetLink}`);
+    console.log('link',sendEmail)
+    if(sendEmail.MessageId){
+      res.status(200).json({ message: "Reset email sent successfully." });
+    } else{
+      res.status(400).json({ message: "Send Email Error", error: "Send Email Error" });
+    }
   }catch (error){
     res.status(500).json({ message: 'Internal server error', error: error });
   }

@@ -40,8 +40,10 @@ export const sendCommonEmail = async ( to: string[], subject: string, body:strin
   try{
     const res = await AWS_SES.sendEmail(params).promise();
     console.log('Email has been sent!', res)
+    return res
   } catch (error) {
     console.error(error)
+    return error
   }
 }
 
