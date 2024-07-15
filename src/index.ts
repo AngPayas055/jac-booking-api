@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 app.post('/email', sendGmail)
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
+app.use('/openAi', require('./routes/openAi'))
 
 app.listen(port, async () => {
   try{
