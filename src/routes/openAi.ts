@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { authenticateToken } from "../utils/middleware";
 const express = require('express');
 const router = express.Router();
 
@@ -36,6 +37,6 @@ async function main(req: any, res: any) {
   }
 }
 
-router.post('/', main)
+router.post('/', authenticateToken, main)
 
 module.exports = router;
