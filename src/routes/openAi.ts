@@ -2,6 +2,8 @@ import OpenAI from "openai";
 import { authenticateToken } from "../utils/middleware";
 import { Role } from "../interface/opnai";
 import express, { Request, Response } from 'express';
+import { Message } from "../models/Ai";
+import { User } from "../models/User";
 
 const express = require('express');
 const router = express.Router();
@@ -20,7 +22,7 @@ const generateOpenAiMessage = async (role:Role, content: string) => {
 
 const writeMessage = async (req: Request, res: Response) => {
   const { language, textFormat, textSize, userMessage, withEmoji, writingStyle } = req.body;
-
+  console.log('js',req.user.id)
   try {
     const prompt = `
       You are an AI assistant helping to draft messages and emails.
@@ -35,8 +37,28 @@ const writeMessage = async (req: Request, res: Response) => {
       Please write the ${textFormat} accordingly.
     `;
     const completion = await generateOpenAiMessage('user', prompt);
-    const message = completion.choices[0].message.content;
-    res.status(200).json({ message: "success", data: message });
+    const generatedMessage = completion.choices[0].message.content;
+
+    // Save the generated message to the database
+    const newMessage = new Message({
+      userMessage,
+      generatedMessage,
+      language,
+      textFormat,
+      textSize,
+      writingStyle,
+      withEmoji,
+    });
+
+    const savedMessage = await newMessage.save();
+
+    // Update the user's document with the new message ID
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { messages: savedMessage._id }
+    });
+
+    // Send the response back to the client
+    res.status(200).json({ message: "success", data: generatedMessage });
   } catch (error) {
     console.error('Error generating message:', error);
     res.status(500).json({ error: 'Internal server error' });

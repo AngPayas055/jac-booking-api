@@ -19,6 +19,7 @@ interface IUser extends Document {
   role: UserRole;
   bookings: string[]; // Modify based on your app's booking model
   resetToken?: string;
+  messages: mongoose.Types.ObjectId[]; 
 }
 
 const userSchema: Schema = new Schema({
@@ -54,6 +55,10 @@ const userSchema: Schema = new Schema({
     ref: 'Booking', // Reference to the Booking model (modify based on your app's booking model name)
   }],
   resetToken: { type: String },
+  messages: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Message', // Reference to the Message model
+  }],
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
