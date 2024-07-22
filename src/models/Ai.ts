@@ -40,7 +40,7 @@ const messageSchema: Schema = new Schema({
     enum: [
       'Formal', 'Friendly', 'Persuasive', 'Expert', 'Joyful', 'Inspirational',
       'Informative', 'Thoughtful', 'Cautionary', 'Grieved', 'Exciting', 'Loving',
-      'Confident', 'Surprised'
+      'Confident', 'Surprised', 'Brutal'
     ],
     required: true,
   },
