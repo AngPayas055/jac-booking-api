@@ -1,6 +1,7 @@
 import { forgotPasswordController, loginController, registerController, resetPasswordController, User } from "../models/User";
 import { authenticateToken } from "../utils/middleware";
 import express, { Request, Response } from 'express';
+import { Message } from "../models/Ai";
 
 const express = require('express');
 const router = express.Router();
@@ -22,10 +23,33 @@ export const getUserPrompts = async (req: Request, res: Response) => {
   }
 }
 
+export const deleteUserPrompt = async (req: Request, res: Response) => {
+  const userId = req.user.id; // Get the user ID from the request
+  const { messageId } = req.params; // Get the message ID from the request parameters
+
+  try {
+    // Delete the message from the Message collection
+    await Message.findByIdAndDelete(messageId);
+
+    // Remove the message ID from the user's messages array
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { messages: messageId } },
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ message: 'Message deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user message:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 router.post('/', registerController)
 router.post('/login', loginController)
 router.post('/forgotpassword', forgotPasswordController)
 router.post('/resetPassword', resetPasswordController)
 router.get('/messages',authenticateToken, getUserPrompts)
+router.delete('/messages/:messageId', authenticateToken, deleteUserPrompt);
 
 module.exports = router;

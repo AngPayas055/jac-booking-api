@@ -173,9 +173,10 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     }  
     const resetToken = await bcrypt.hash(email + Date.now().toString(), 10);
     user.resetToken = encodeURIComponent(resetToken)
+    console.log()
     await user.save();
     let webAppLink = process.env.FRONTEND
-    const resetLink = `${webAppLink}/forgot-password/${resetToken}`;
+    const resetLink = `${webAppLink}/forgot-password/${user.resetToken}`;
     const sendEmail = await sendCommonEmail([email], 'Reset Your Password', `Click the following link to reset your password: ${resetLink}`);
     if(sendEmail.MessageId){
       res.status(200).json({ message: "Reset email sent successfully." });
