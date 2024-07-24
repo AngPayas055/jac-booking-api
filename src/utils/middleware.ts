@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { IUser, User } from '../models/User';
+import express, { Request, Response } from 'express';
 require('dotenv').config()
-
+const MY_ACCOUNT_ID = process.env.MY_ACCOUNT_ID;
 export const authenticateToken = async (req: any, res: any, next: any) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
@@ -54,3 +55,10 @@ const verifyJWT = async (token: string): Promise<{ success: boolean, user?: any 
 
   })
 }
+export const authorizeAdmin = async (req: Request, res: Response, next: any) => {
+  const userId = req.user.id.toString(); 
+  if (userId !== MY_ACCOUNT_ID) {
+    return res.status(403).json({ error: 'Forbidden: You do not have access to this resource' });
+  }
+  next(); 
+};

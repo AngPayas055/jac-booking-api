@@ -146,7 +146,8 @@ export const loginController = async (req: Request, res: Response) => {
       token: generateToken(email),
       email: email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
+      id: user._id
     }
 
     if (isPasswordValid) {

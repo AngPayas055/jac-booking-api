@@ -1,5 +1,5 @@
 import { forgotPasswordController, loginController, registerController, resetPasswordController, User } from "../models/User";
-import { authenticateToken } from "../utils/middleware";
+import { authenticateToken, authorizeAdmin } from "../utils/middleware";
 import express, { Request, Response } from 'express';
 import { Message } from "../models/Ai";
 
@@ -44,6 +44,15 @@ export const deleteUserPrompt = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find().exec(); // Retrieve all users
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 router.post('/', registerController)
 router.post('/login', loginController)
@@ -51,5 +60,6 @@ router.post('/forgotpassword', forgotPasswordController)
 router.post('/resetPassword', resetPasswordController)
 router.get('/messages',authenticateToken, getUserPrompts)
 router.delete('/messages/:messageId', authenticateToken, deleteUserPrompt);
+router.get('/users', authenticateToken, authorizeAdmin, getAllUsers);
 
 module.exports = router;
