@@ -2,7 +2,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-import { sendCommonEmail } from '../services/email';
+import crypto from 'crypto';
+import { sendCommonEmail, sendVerificationEmail } from '../services/email';
 
 enum UserRole {
   ADMIN = 'admin',
@@ -20,6 +21,8 @@ interface IUser extends Document {
   bookings: string[]; // Modify based on your app's booking model
   resetToken?: string;
   messages: mongoose.Types.ObjectId[]; 
+  isVerified: boolean; 
+  verificationToken?: string; 
 }
 
 const userSchema: Schema = new Schema({
@@ -59,6 +62,13 @@ const userSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Message', // Reference to the Message model
   }],
+  isVerified: {
+    type: Boolean,
+    default: false, // Default to false until verified
+  },
+  verificationToken: {
+    type: String,
+  },
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
@@ -81,6 +91,9 @@ function generateToken(email) {
     expiresIn: "7d",
   });
   return token
+}
+const generateVerificationToken = () => {
+  return crypto.randomBytes(32).toString('hex');
 }
 
 export const registerController = async (req: Request, res: Response) => {
@@ -109,17 +122,21 @@ export const registerController = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    const verificationToken = generateVerificationToken();
+    
     const newUser = new User({
       phone,
       firstName,
       lastName,
       email,
       password: hashedPassword,
-      role: UserRole.CUSTOMER, //default role
+      role: UserRole.CUSTOMER, 
+      isVerified: false, 
+      verificationToken,
     });
 
     const savedUser = await newUser.save();
+    await sendVerificationEmail(email, verificationToken);
 
     res.status(201).json({ message: "User registered successfully", data: email });
   } catch (error) {
