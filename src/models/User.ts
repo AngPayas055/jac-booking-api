@@ -158,6 +158,13 @@ export const loginController = async (req: Request, res: Response) => {
       res.status(400).send({ message: "Incorrect email/password.", error: "Incorrect email/password." });
       return;
     }
+    if(!user.isVerified == true){
+      res.status(400).send({ 
+        message: "Your account has not been verified. Please check your email for the verification link and verify your account before logging in.", 
+        error: "Your account has not been verified. Please check your email for the verification link and verify your account before logging in." 
+      });     
+      return; 
+    }
     const isPasswordValid = await comparePassword(password, user.password);
     const userData = {
       token: generateToken(email),
