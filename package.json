@@ -8,7 +8,8 @@
     "start": "nodemon src/index.ts",
     "vercel-build": "echo hello",
     "build": "tsc",
-    "devStart": "nodemon src/index.ts"
+    "devStart": "nodemon src/index.ts",
+    "start:prod": "node dist/src/main"
   },
   "author": "",
   "license": "ISC",
