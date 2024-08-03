@@ -28,9 +28,9 @@ const app = express();
 const publicPath = path_1.default.join(__dirname, '..', 'public');
 const port = process.env.PORT;
 const url = process.env.MONGODB_URI;
-;
+var cors = require('cors');
+app.use(cors());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
-console.log(`Docs available at http://localhost:${port}/docs/`);
 app.use(express.static(publicPath));
 app.use(body.json({
     limit: '500kb'
@@ -41,6 +41,7 @@ app.get('/', (req, res) => {
 app.post('/email', email_1.sendGmail);
 app.use('/customers', require('./routes/customers'));
 app.use('/users', require('./routes/users'));
+app.use('/openAi', require('./routes/openAi'));
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!url)
