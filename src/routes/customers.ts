@@ -8,7 +8,7 @@ const router = express.Router();
 console.log('customers route loaded');
 
 router.post('/', createCustomerController)
-router.get('/', authenticateToken, getCustomersController)
+router.get('/', getCustomersController)
 router.get('/:id', getCustomerController)
 
 module.exports = router;
